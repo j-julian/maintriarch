@@ -15,7 +15,7 @@ A small script to simplify Arch maintenance. Based on recommendations from the A
 
 ## To do
 
-- [ ] ignore symlinks in /run/** and /proc/**
+- [x] ignore symlinks in /run/** and /proc/**
 - [ ] create config file to store e.g. location for pkglists
 - [ ] create a menu so that the user isn't prompted for each possible action
 - [ ] allow user to choose which pkglists to generate
