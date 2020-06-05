@@ -13,7 +13,7 @@ check_for_errors() {
 	echo "Done"
 }
 
-create_scripts() {
+create_pkglists() {
 	pacman -Qqe > pkglist.txt
 	comm -13 <(pacman -Qqdt | sort) <(pacman -Qqdtt | sort) > optdeplist.txt
 	pacman -Qqem > foreignpkglist.txt
@@ -51,7 +51,7 @@ fi
 
 read -rp "Generate pkglists? (y/N) ";
 if [ "$REPLY" == "y" ]; then
-	create_scripts
+	create_pkglists
 fi
 
 read -rp "Backup pacman database? (y/N) ";
