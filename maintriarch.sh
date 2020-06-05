@@ -77,12 +77,18 @@ fi
 
 read -rp "Clean config dirs? (y/N) ";
 if [ "$REPLY" == "y" ]; then
-	echo "Processing ~/.config"
-	remove_old_configs ~/.config
-	echo "Processing ~/.cache"
-	remove_old_configs ~/.cache
-	echo "Processing ~/.local/share"
-	remove_old_configs ~/.local/share
+	read -rp "Clean ~/.config? (y/N) ";
+	if [ "$REPLY" == "y" ]; then
+		remove_old_configs ~/.config
+	fi
+	read -rp "Clean ~/.cache? (y/N) ";
+	if [ "$REPLY" == "y" ]; then
+		remove_old_configs ~/.cache
+	fi
+	read -rp "Clean ~/.local/share? (y/N) ";
+	if [ "$REPLY" == "y" ]; then
+		remove_old_configs ~/.local/share
+	fi
 fi
 
 read -rp "Delete broken symlinks? (y/N) ";

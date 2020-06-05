@@ -21,6 +21,6 @@ A small script to simplify Arch maintenance. Based on recommendations from the A
 - [x] allow user to choose which pkglists to generate
 - [ ] prompt before overriding any files
 - [ ] provide output when deleting a file
-- [ ] allow user to choose which dirs to clean
+- [x] allow user to choose which dirs to clean
 - [ ] auto-skip config files for packages which are still installed
 - [ ] stop writing to dos and actually code
