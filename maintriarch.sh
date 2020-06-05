@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# still to do:
-# [ ] ignore symlinks in /run/** and /proc/**
-# [ ] implement config file for e.g. where to store pkglists
-# [ ] let user choose functions freely, instead of being prompted once for each one
-
 backup_pacman_database() {
 	tar -cjf pacman_database.tar.bz2 /var/lib/pacman/local
 }
