@@ -34,6 +34,7 @@ delete_broken_symlinks() {
 			read -rp "Delete \"$symlink\"? (y/N) "
 			if [ "$REPLY" == "y" ]; then
 				rm "$symlink"
+				echo "Deleted $symlink"
 			fi
 		fi
 	done
@@ -47,6 +48,7 @@ remove_old_configs() {
 		read -rp "Delete $folder? (y/N)"
 		if [ "$REPLY" == "y" ]; then
 			rm -r "${folder:?}"
+			echo "Deleted $folder"
 		fi
 	done
 }
