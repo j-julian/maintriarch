@@ -21,9 +21,11 @@ create_pkglists() {
 
 delete_broken_symlinks() {
 	for symlink in $(sudo find / -xtype l); do
-		read -rp "Delete \"$symlink\"? (y/N) "
-		if [ "$REPLY" == "y" ]; then
-			rm "$symlink"
+		if [[ ! "$symlink" =~ /run/* ]] && [[ ! "$symlink" =~ /proc/* ]]; then
+			read -rp "Delete \"$symlink\"? (y/N) "
+			if [ "$REPLY" == "y" ]; then
+				rm "$symlink"
+			fi
 		fi
 	done
 }
