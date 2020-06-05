@@ -14,9 +14,18 @@ check_for_errors() {
 }
 
 create_pkglists() {
-	pacman -Qqe > pkglist.txt
-	comm -13 <(pacman -Qqdt | sort) <(pacman -Qqdtt | sort) > optdeplist.txt
-	pacman -Qqem > foreignpkglist.txt
+	read -rp "Generate list of explicitly installed packages? (y/N) "
+	if [ "$REPLY" == "y" ]; then
+		pacman -Qqe > pkglist.txt
+	fi
+	read -rp "Generate list of installed optional dependencies? (y/N) "
+	if [ "$REPLY" == "y" ]; then
+		comm -13 <(pacman -Qqdt | sort) <(pacman -Qqdtt | sort) > optdeplist.txt
+	fi
+	read -rp "Generate list of installed foreign packages? (y/N) "
+	if [ "$REPLY" == "y" ]; then
+		pacman -Qqem > foreignpkglist.txt
+	fi
 }
 
 delete_broken_symlinks() {
