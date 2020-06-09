@@ -14,16 +14,28 @@ check_for_errors() {
 }
 
 create_pkglists() {
-	pacman -Qqe > pkglist.txt
-	comm -13 <(pacman -Qqdt | sort) <(pacman -Qqdtt | sort) > optdeplist.txt
-	pacman -Qqem > foreignpkglist.txt
+	read -rp "Generate list of explicitly installed packages? (y/N) "
+	if [ "$REPLY" == "y" ]; then
+		pacman -Qqe > pkglist.txt
+	fi
+	read -rp "Generate list of installed optional dependencies? (y/N) "
+	if [ "$REPLY" == "y" ]; then
+		comm -13 <(pacman -Qqdt | sort) <(pacman -Qqdtt | sort) > optdeplist.txt
+	fi
+	read -rp "Generate list of installed foreign packages? (y/N) "
+	if [ "$REPLY" == "y" ]; then
+		pacman -Qqem > foreignpkglist.txt
+	fi
 }
 
 delete_broken_symlinks() {
 	for symlink in $(sudo find / -xtype l); do
-		read -rp "Delete \"$symlink\"? (y/N) "
-		if [ "$REPLY" == "y" ]; then
-			rm "$symlink"
+		if [[ ! "$symlink" =~ /run/* ]] && [[ ! "$symlink" =~ /proc/* ]]; then
+			read -rp "Delete \"$symlink\"? (y/N) "
+			if [ "$REPLY" == "y" ]; then
+				rm "$symlink"
+				echo "Deleted $symlink"
+			fi
 		fi
 	done
 }
@@ -36,6 +48,7 @@ remove_old_configs() {
 		read -rp "Delete $folder? (y/N)"
 		if [ "$REPLY" == "y" ]; then
 			rm -r "${folder:?}"
+			echo "Deleted $folder"
 		fi
 	done
 }
@@ -66,12 +79,18 @@ fi
 
 read -rp "Clean config dirs? (y/N) ";
 if [ "$REPLY" == "y" ]; then
-	echo "Processing ~/.config"
-	remove_old_configs ~/.config
-	echo "Processing ~/.cache"
-	remove_old_configs ~/.cache
-	echo "Processing ~/.local/share"
-	remove_old_configs ~/.local/share
+	read -rp "Clean ~/.config? (y/N) ";
+	if [ "$REPLY" == "y" ]; then
+		remove_old_configs ~/.config
+	fi
+	read -rp "Clean ~/.cache? (y/N) ";
+	if [ "$REPLY" == "y" ]; then
+		remove_old_configs ~/.cache
+	fi
+	read -rp "Clean ~/.local/share? (y/N) ";
+	if [ "$REPLY" == "y" ]; then
+		remove_old_configs ~/.local/share
+	fi
 fi
 
 read -rp "Delete broken symlinks? (y/N) ";
