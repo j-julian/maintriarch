@@ -1,7 +1,25 @@
 #!/bin/bash
 
+#############
+# Functions #
+#############
+
 backup_pacman_database() {
-	tar -cjf pacman_database.tar.bz2 /var/lib/pacman/local
+	[ "$(check_before_overwrite pacman_database.tar.bz2)" == "true" ] && tar -cjf pacman_database.tar.bz2 /var/lib/pacman/local
+}
+
+# Takes a filename as its first argument, then returns a boolean representing whether or not to overwrite the file
+check_before_overwrite() {
+	if [ -e "$1" ]; then
+		read -rp "$1 already exits, would you like to overwrite it? (y/N) "
+		if [ "$REPLY" == "y" ]; then
+			echo "true"
+		else
+			echo "false"
+		fi
+	else
+		echo "true"
+	fi
 }
 
 check_for_errors() {
@@ -16,15 +34,15 @@ check_for_errors() {
 create_pkglists() {
 	read -rp "Generate list of explicitly installed packages? (y/N) "
 	if [ "$REPLY" == "y" ]; then
-		pacman -Qqe > pkglist.txt
+		[ "$(check_before_overwrite pkglist.txt)" == "true" ] && pacman -Qqe > pkglist.txt
 	fi
 	read -rp "Generate list of installed optional dependencies? (y/N) "
 	if [ "$REPLY" == "y" ]; then
-		comm -13 <(pacman -Qqdt | sort) <(pacman -Qqdtt | sort) > optdeplist.txt
+		[ "$(check_before_overwrite optdeplist.txt)" == "true" ] && comm -13 <(pacman -Qqdt | sort) <(pacman -Qqdtt | sort) > optdeplist.txt
 	fi
 	read -rp "Generate list of installed foreign packages? (y/N) "
 	if [ "$REPLY" == "y" ]; then
-		pacman -Qqem > foreignpkglist.txt
+		[ "$(check_before_overwrite foreignpkglist.txt)" == "true" ] && pacman -Qqem > foreignpkglist.txt
 	fi
 }
 
@@ -56,6 +74,10 @@ remove_old_configs() {
 remove_orphans() {
 	sudo pacman -Rns "$(pacman -Qtdq)"
 }
+
+#############
+# Main code #
+#############
 
 read -rp "Check for failed systemd services & errors in journal? (y/N) "
 if [ "$REPLY" == "y" ]; then
