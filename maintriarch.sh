@@ -47,7 +47,7 @@ create_pkglists() {
 }
 
 delete_broken_symlinks() {
-	for symlink in $(sudo find / -xtype l); do
+	for symlink in $(sudo find / -xtype l 2> /dev/null); do
 		if [[ ! "$symlink" =~ /run/* ]] && [[ ! "$symlink" =~ /proc/* ]] && [[ ! "$symlink" =~ /.snapshots/* ]]; then
 			read -rp "Delete \"$symlink\"? (y/N) "
 			if [ "$REPLY" == "y" ]; then
@@ -72,7 +72,7 @@ remove_old_configs() {
 }
 
 remove_orphans() {
-	sudo pacman -Rns "$(pacman -Qtdq)"
+	sudo pacman -Rns "$(pacman -Qtdq)" 2> /dev/null
 }
 
 #############
