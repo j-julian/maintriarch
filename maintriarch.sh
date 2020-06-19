@@ -63,7 +63,7 @@ remove_old_configs() {
 	for folder in "$1"/*; do
 		# to ensure folder is not empty
 		[ -e "$folder" ] || continue
-		read -rp "Delete $folder? (y/N)"
+		read -rp "Delete $folder? (y/N) "
 		if [ "$REPLY" == "y" ]; then
 			rm -r "${folder:?}"
 			echo "Deleted $folder"
