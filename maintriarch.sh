@@ -48,7 +48,7 @@ create_pkglists() {
 
 delete_broken_symlinks() {
 	for symlink in $(sudo find / -xtype l); do
-		if [[ ! "$symlink" =~ /run/* ]] && [[ ! "$symlink" =~ /proc/* ]]; then
+		if [[ ! "$symlink" =~ /run/* ]] && [[ ! "$symlink" =~ /proc/* ]] && [[ ! "$symlink" =~ /.snapshots/* ]]; then
 			read -rp "Delete \"$symlink\"? (y/N) "
 			if [ "$REPLY" == "y" ]; then
 				rm "$symlink"
